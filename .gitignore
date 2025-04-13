@@ -1,0 +1,73 @@
+# Unreal Engine Git Ignore File
+# Recommended for Unreal Engine projects
+
+# Ignore user-specific files
+Saved/
+Config/DefaultEditorPerProjectUserSettings.ini
+Config/DefaultEditorSettings.ini
+Config/DefaultGameUserSettings.ini
+Config/DefaultInput.ini
+Config/DefaultScalability.ini
+
+# Ignore temporary and build-specific files
+Binaries/
+DerivedDataCache/
+Intermediate/
+Build/
+
+# Ignore compiled assets
+*.sln
+*.sdf
+*.suo
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.xcodeproj
+*.xcworkspace
+
+# Ignore logs
+*.log
+*.tlog
+*.obj
+*.pch
+*.pdb
+*.idb
+*.ipch
+
+# Ignore auto-generated files
+*.aps
+*.ncb
+*.o
+*.dll
+*.exp
+*.lib
+*.vc.db
+*.opendb
+*.class
+
+# Ignore Unreal Engine specific cache files
+*.umap
+*.uasset
+*.ubulk
+*.uexp
+*.uprojectdirs
+
+# Ignore Mac specific files
+.DS_Store
+
+# Ignore Windows specific files
+Thumbs.db
+Desktop.ini
+
+# Ignore Unreal Engine project files
+*.uproject.sln
+*.sln.DotSettings.user
+
+# Ignore Unreal Engine auto-generated folders
+.vscode/
+.idea/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+
