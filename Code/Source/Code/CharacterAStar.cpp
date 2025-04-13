@@ -2,13 +2,21 @@
 
 
 #include "CharacterAStar.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 ACharacterAStar::ACharacterAStar()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+    // 初始化移动变量
+    bIsMoving = false;
+    MoveSpeed = 300.f; // 可根据需求调整速度
     // 加载 Skeletal Mesh（确保路径是你项目中资源的正确路径）
+    MoveTo2DPoint(FVector2D(100.f, 100.f), FVector2D(300.f, 900.f));
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple.SKM_Quinn_Simple'"));
     if (MeshAsset.Succeeded())
     {
@@ -41,6 +49,7 @@ ACharacterAStar::ACharacterAStar()
 void ACharacterAStar::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
 
@@ -49,6 +58,20 @@ void ACharacterAStar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    if (bIsMoving)
+    {
+        // 使用恒定速率插值，平滑移动到目标位置
+        FVector CurrentLocation = GetActorLocation();
+        FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, MoveSpeed);
+        SetActorLocation(NewLocation);
+
+        // 如果足够接近目标，停止移动
+        if (FVector::Dist(NewLocation, TargetLocation) < 1.0f)
+        {
+            bIsMoving = false;
+        }
+    }
+
 }
 
 // Called to bind functionality to input
@@ -56,5 +79,26 @@ void ACharacterAStar::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ACharacterAStar::MoveTo2DPoint(const FVector2D& StartPoint, const FVector2D& EndPoint)
+{
+    // 设置起始位置，保持原有 Z 值（或指定一个固定 Z）
+    FVector NewStart(StartPoint.X, StartPoint.Y, 100.0f);
+    SetActorLocation(NewStart);
+
+    // 计算目标位置，使用起始位置 Z 值
+    TargetLocation = FVector(EndPoint.X, EndPoint.Y, NewStart.Z);
+
+    // 开始移动
+    bIsMoving = true;
+
+    // 如果你希望角色朝向移动方向，可以更新角色朝向
+    FVector Direction = (TargetLocation - NewStart).GetSafeNormal();
+    if (!Direction.IsNearlyZero())
+    {
+        FRotator NewRotation = Direction.Rotation();
+        SetActorRotation(NewRotation);
+    }
 }
 

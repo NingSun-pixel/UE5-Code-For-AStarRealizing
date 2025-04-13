@@ -26,4 +26,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// 新增加的函数：接受2D起点和终点
+	void MoveTo2DPoint(const FVector2D& StartPoint, const FVector2D& EndPoint);
+
+protected:
+	// 移动控制变量
+	bool bIsMoving;
+	// 存储目标位置（世界坐标），这里保持 Z 为角色当前 Z
+	FVector TargetLocation;
+	// 移动速度（单位：世界单位/秒）
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float MoveSpeed;
 };
